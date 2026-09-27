@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wanderly Travel Planner</title>
+<meta name="description" content="Wanderly: rencanakan budget, itinerary, checklist, dan outfit perjalanan — lalu ubah perjalananmu jadi video animasi rute di globe 3D.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0B1220;--navy2:#111A2C;--navy3:#18233A;--line:#243049;--ink:#E8EDF7;--ink2:#A3AEC4;--grey:#8A93A6;--blue:#4C8DFF;--aurora:#7C5CFF;--emerald:#37C97F;--gold:#E8C27A;--space:#03050b}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--space)}
+body{background:var(--space);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3{font-family:Sora,sans-serif;letter-spacing:-.02em}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.pad{padding-left:max(16px,calc((100vw - 1180px)/2));padding-right:max(16px,calc((100vw - 1180px)/2))}
+
+/* HERO: globe hidup */
+.hero{position:relative;min-height:100svh;display:grid;align-items:center;overflow:hidden}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%}
+.hero .copy{position:relative;z-index:2;max-width:560px;padding-top:80px;padding-bottom:80px}
+.brand{position:absolute;top:24px;left:0;right:0;z-index:3;display:flex;justify-content:space-between;align-items:center}
+.brand b{font-family:Sora;font-size:20px;font-weight:700;display:flex;align-items:center;gap:10px}
+.brand b i{width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#6fb3ff,#1b4f96 60%,#0b1a3a);box-shadow:0 0 0 2px rgba(124,92,255,.5)}
+.brand a{font-size:14px;color:var(--ink2);text-decoration:none}
+.hero h1{font-size:clamp(40px,7vw,76px);line-height:1.02;font-weight:800}
+.hero p{color:var(--ink2);font-size:18px;margin:20px 0 32px;max-width:46ch}
+.cta{display:inline-flex;align-items:center;gap:12px;height:56px;padding:0 24px;border-radius:18px;background:linear-gradient(120deg,var(--blue),var(--aurora));color:#fff;font-weight:600;text-decoration:none;box-shadow:0 18px 40px -16px var(--aurora)}
+.cta svg{width:22px;height:22px}
+.hero small{display:block;margin-top:14px;color:var(--grey);font-size:13px}
+.hero .fade{position:absolute;inset:auto 0 0 0;height:30vh;background:linear-gradient(transparent,var(--navy));z-index:1}
+
+/* SIKLUS: rute 5 titik */
+.cycle{background:var(--navy);padding-top:96px;padding-bottom:96px}
+.cycle h2{font-size:clamp(28px,4vw,44px);max-width:20ch}
+.cycle>p{color:var(--ink2);max-width:60ch;margin-top:12px}
+.route{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:24px;margin-top:64px}
+.route::before{content:"";position:absolute;top:13px;left:10%;right:10%;height:2px;background:repeating-linear-gradient(90deg,var(--blue) 0 8px,transparent 8px 14px)}
+.stop{position:relative}
+.stop .dot{width:28px;height:28px;border-radius:50%;background:var(--navy);border:3px solid var(--blue);display:grid;place-items:center;font:700 12px Sora;margin-bottom:18px;position:relative;z-index:1}
+.stop:last-child .dot{border-color:var(--aurora);box-shadow:0 0 0 6px rgba(124,92,255,.2)}
+.stop h3{font-size:19px;margin-bottom:6px}
+.stop p{color:var(--ink2);font-size:14.5px}
+@media (max-width:820px){.route{grid-template-columns:1fr;gap:28px;padding-left:44px}.route::before{top:0;bottom:0;left:13px;right:auto;width:2px;height:auto;background:repeating-linear-gradient(180deg,var(--blue) 0 8px,transparent 8px 14px)}.stop .dot{position:absolute;left:-44px;top:0}}
+
+/* STUDIO */
+.studio{background:var(--navy);padding-top:40px;padding-bottom:120px;display:grid;grid-template-columns:1.1fr .9fr;gap:64px;align-items:center}
+.studio h2{font-size:clamp(28px,4vw,44px)}
+.studio p{color:var(--ink2);margin-top:14px;max-width:52ch}
+.studio ul{list-style:none;margin-top:24px;display:grid;gap:12px}
+.studio li{display:flex;gap:12px;align-items:flex-start;color:var(--ink)}
+.studio li i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--aurora);margin-top:9px}
+.phone{justify-self:center;width:300px;aspect-ratio:9/19;border-radius:44px;background:#02040a;padding:9px;box-shadow:0 0 0 1px #1d2536,0 50px 100px -40px var(--aurora)}
+.phone canvas{width:100%;height:100%;border-radius:36px;display:block;background:var(--space)}
+@media (max-width:900px){.studio{grid-template-columns:1fr}}
+
+/* PRIVASI */
+.privacy{background:var(--navy2);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding-top:72px;padding-bottom:72px;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.privacy h3{font-size:18px;margin-bottom:8px}
+.privacy p{color:var(--ink2);font-size:15px}
+.privacy a{color:var(--blue)}
+@media (max-width:820px){.privacy{grid-template-columns:1fr;gap:28px}}
+
+footer{background:var(--navy);padding-top:48px;padding-bottom:48px;display:flex;flex-wrap:wrap;gap:16px 32px;justify-content:space-between;color:var(--grey);font-size:14px}
+footer nav{display:flex;gap:24px}
+footer a{text-decoration:none}
+footer a:hover{color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<section class="hero pad" aria-label="Wanderly">
+ <canvas id="heroGlobe" aria-hidden="true"></canvas>
+ <div class="fade"></div>
+ <div class="brand pad"><b><i></i>Wanderly</b><a href="privacy.html">Privasi</a></div>
+ <div class="copy">
+  <h1>Rencanakan perjalanan. Jalani. Jadikan cerita.</h1>
+  <p>Budget, itinerary, checklist, dan outfit tiap hari tersusun di satu aplikasi. Setelah pulang, ubah rute perjalananmu jadi video animasi di globe 3D untuk Reels, TikTok, dan YouTube.</p>
+  <a class="cta" href="https://play.google.com/store/apps/details?id=id.ekalaya.wanderly"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 2.5v19l10.5-9.5z" opacity=".9"/><path d="M14.5 12L4 2.5l12.6 7.2z" opacity=".75"/><path d="M14.5 12L4 21.5l12.6-7.2z" opacity=".6"/><path d="M16.6 9.7l3.5 2-3.5 2.1-2.1-1.8z"/></svg>Unduh di Google Play</a>
+  <small>Gratis. Tanpa akun. Data trip tersimpan di HP-mu.</small>
+ </div>
+</section>
+
+<section class="cycle pad">
+ <h2>Dari ide pertama sampai video terakhir.</h2>
+ <p>Setiap trip punya siklus hidup. Data yang kamu isi saat merencanakan tidak berhenti di hari keberangkatan.</p>
+ <div class="route">
+  <div class="stop"><span class="dot">1</span><h3>Rencanakan</h3><p>Wizard empat langkah, itinerary berbentuk timeline yang bisa digeser, estimasi budget sepuluh kategori dalam mata uang mana pun.</p></div>
+  <div class="stop"><span class="dot">2</span><h3>Persiapkan</h3><p>Checklist dokumen, packing, dan keuangan dengan pengingat untuk yang belum dicentang. Outfit per hari dari lemarimu sendiri.</p></div>
+  <div class="stop"><span class="dot">3</span><h3>Jalani</h3><p>Travel Mode menampilkan agenda berikutnya dan jam berangkat. Catat pengeluaran dalam dua ketukan, bahkan tanpa internet.</p></div>
+  <div class="stop"><span class="dot">4</span><h3>Realisasikan</h3><p>Bandingkan rencana dengan kenyataan: budget terpakai, tempat yang benar-benar dikunjungi, dan yang dilewati.</p></div>
+  <div class="stop"><span class="dot">5</span><h3>Ceritakan</h3><p>Journey Studio membuat video rute sinematik, otomatis dari trip atau dari stop yang kamu susun sendiri.</p></div>
+ </div>
+</section>
+
+<section class="studio pad">
+ <div>
+  <h2>Perjalananmu, seperti film.</h2>
+  <p>Kamera turun dari luar angkasa, garis rute tergambar mengikuti lengkung bumi, pesawat berbelok mengikuti arah, lalu kota tujuan menyala di bawah sorotan.</p>
+  <ul>
+   <li><i></i>Lima tema: Cinematic Earth, Night Flight, Luxury, Travel Journal, Minimal.</li>
+   <li><i></i>Format 9:16, 16:9, 1:1, dan 4:5 untuk semua platform.</li>
+   <li><i></i>Foto kenangan muncul sebagai polaroid di setiap kota.</li>
+   <li><i></i>Export MP4 langsung ke galeri, siap dibagikan.</li>
+  </ul>
+ </div>
+ <div class="phone"><canvas id="phoneGlobe" width="564" height="1206" aria-label="Contoh animasi rute Jakarta ke Singapore"></canvas></div>
+</section>
+
+<section class="privacy pad">
+ <div><h3>Tanpa akun</h3><p>Buka aplikasi dan langsung merencanakan. Tidak ada pendaftaran, tidak ada kata sandi.</p></div>
+ <div><h3>Datamu di HP-mu</h3><p>Trip, budget, foto, dan video tersimpan lokal. Kami tidak punya server yang menyimpan perjalananmu.</p></div>
+ <div><h3>Iklan secukupnya</h3><p>Banner hanya di layar beranda, tidak pernah di Travel Mode atau saat mencatat uang. Baca <a href="privacy.html">kebijakan privasi</a>.</p></div>
+</section>
+
+<footer class="pad">
+ <span>© 2026 Ekalaya Technology</span>
+ <nav><a href="privacy.html">Kebijakan privasi</a><a href="mailto:ekalayadev@gmail.com">Kontak</a></nav>
+ <span>Peta © OpenStreetMap contributors · Citra bumi NASA</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+<script>
+(function(){
+const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches||location.search.includes('shot');
+const ez=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2, clamp=x=>Math.max(0,Math.min(1,x)), lerp=(a,b,t)=>a+(b-a)*t;
+const JKT=[106.85,-6.21],SIN=[103.82,1.35],TYO=[139.7,35.7],BALI=[115.2,-8.65];
+let LAND=null;
+const stars=[];for(let i=0;i<260;i++){const s=Math.sin(i*12.9898)*43758.5453;stars.push([s-Math.floor(s),Math.abs(Math.sin(i*7.1))%1,(i%3)*.5+.4,i]);}
+function plane(ctx){ctx.beginPath();[[14,0],[2,-2.2],[-3,-12],[-6,-12],[-3,-2.2],[-10,-2],[-13,-6],[-15,-6],[-13,0],[-15,6],[-13,6],[-10,2],[-3,2.2],[-6,12],[-3,12],[2,2.2]].forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));ctx.closePath();ctx.fill();}
+function draw(ctx,W,H,o){
+  ctx.fillStyle='#03050b';ctx.fillRect(0,0,W,H);
+  for(const s of stars){ctx.globalAlpha=.2+.5*Math.abs(Math.sin(s[3]+o.t*.5));ctx.fillStyle='#fff';ctx.fillRect(s[0]*W,s[1]*H,s[2],s[2]);}ctx.globalAlpha=1;
+  const R=o.R,cx=o.cx,cy=o.cy;
+  const ag=ctx.createRadialGradient(cx,cy,R*.92,cx,cy,R*1.28);ag.addColorStop(0,'rgba(76,141,255,.45)');ag.addColorStop(1,'rgba(76,141,255,0)');ctx.fillStyle=ag;ctx.beginPath();ctx.arc(cx,cy,R*1.28,0,7);ctx.fill();
+  const og=ctx.createRadialGradient(cx-R*.35,cy-R*.4,R*.1,cx,cy,R);og.addColorStop(0,'#123a78');og.addColorStop(1,'#040a1e');ctx.fillStyle=og;ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.fill();
+  if(!window.d3)return;
+  const proj=d3.geoOrthographic().scale(R).translate([cx,cy]).rotate(o.rot).clipAngle(90),path=d3.geoPath(proj,ctx);
+  ctx.strokeStyle='rgba(76,141,255,.08)';ctx.beginPath();path(d3.geoGraticule10());ctx.stroke();
+  if(LAND){ctx.fillStyle='#1c3470';ctx.beginPath();path(LAND);ctx.fill();}
+  const sh=ctx.createRadialGradient(cx-R*.3,cy-R*.3,R*.2,cx,cy,R);sh.addColorStop(0,'rgba(255,255,255,.07)');sh.addColorStop(.7,'rgba(0,0,0,0)');sh.addColorStop(1,'rgba(0,0,0,.5)');ctx.fillStyle=sh;ctx.beginPath();ctx.arc(cx,cy,R,0,7);ctx.fill();
+  for(const r of o.routes){const pts=[];for(let i=0;i<=48*r.p;i++)pts.push(r.f(i/48));pts.push(r.f(r.p));
+    ctx.beginPath();path({type:'LineString',coordinates:pts});ctx.strokeStyle='rgba(143,180,255,.35)';ctx.lineWidth=8;ctx.stroke();ctx.strokeStyle='#dfe8ff';ctx.lineWidth=2.4;ctx.stroke();
+    if(r.p>0&&r.p<1){const a=proj(r.f(r.p)),b=proj(r.f(Math.min(1,r.p+.01)));if(a&&b){ctx.save();ctx.translate(a[0],a[1]);ctx.rotate(Math.atan2(b[1]-a[1],b[0]-a[0]));ctx.fillStyle='#fff';ctx.scale(o.ps,o.ps);plane(ctx);ctx.restore();}}}
+  for(const c of o.pins){const p=proj(c);if(!p||d3.geoDistance(c,[-o.rot[0],-o.rot[1]])>1.5)continue;ctx.fillStyle='rgba(124,92,255,.35)';ctx.beginPath();ctx.arc(p[0],p[1],10+3*Math.sin(o.t*4),0,7);ctx.fill();ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(p[0],p[1],4,0,7);ctx.fill();}
+}
+function hero(){
+  const cv=document.getElementById('heroGlobe'),ctx=cv.getContext('2d');let W,H;
+  function size(){const d=Math.min(2,devicePixelRatio||1);W=cv.width=cv.clientWidth*d;H=cv.height=cv.clientHeight*d;}
+  size();addEventListener('resize',()=>{size();if(REDUCED)f(performance.now());});
+  const legs=[[JKT,SIN],[SIN,TYO],[TYO,BALI]].map(([a,b])=>window.d3?d3.geoInterpolate(a,b):null);
+  const t0=performance.now();
+  function f(now){const t=REDUCED?5:((now-t0)/1000);const cyc=t%15;
+    const routes=legs.map((fn,i)=>({f:fn,p:ez(clamp((cyc-1-i*4)/3.2))})).filter(r=>r.f&&r.p>0);
+    const wide=W>H*1.1;const R=Math.min(W,H)*(wide?.46:.42);
+    draw(ctx,W,H,{R,cx:wide?W*.7:W*.5,cy:wide?H*.52:H*.72,rot:[-(118+Math.sin(t*.08)*14),8],routes,pins:[JKT,SIN,TYO,BALI],t,ps:Math.max(1,R/260)});
+    if(!REDUCED)requestAnimationFrame(f);}
+  f(performance.now());
+}
+function phone(){
+  const cv=document.getElementById('phoneGlobe'),ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  const fn=window.d3?d3.geoInterpolate(JKT,SIN):null;const t0=performance.now();
+  function f(now){const t=REDUCED?4.5:((now-t0)/1000)%8;let R,center,p=0;
+    if(t<2){const k=ez(t/2);R=lerp(240,1100,k);center=[lerp(80,JKT[0],k),lerp(10,JKT[1],k)];}
+    else if(t<5.5){p=ez((t-2)/3.5);center=fn?fn(p):SIN;R=1100-Math.sin(p*Math.PI)*450;}
+    else{const k=ez(clamp((t-5.5)/1.5));center=SIN;R=lerp(1100,2600,k);p=1;}
+    draw(ctx,W,H,{R,cx:W/2,cy:H*.5,rot:[-center[0],-center[1]],routes:fn&&t>=2?[{f:fn,p}]:[],pins:[JKT,SIN],t,ps:1.6});
+    ctx.fillStyle='#fff';ctx.textAlign='center';ctx.font='800 44px Sora, sans-serif';
+    ctx.globalAlpha=t<2?clamp(t-.4):t>5.5?clamp((t-5.5)*2):0;const label=t<3?'JAKARTA':'SINGAPORE';
+    if(ctx.globalAlpha>0){ctx.fillText(label.split('').join(String.fromCharCode(8202)),W/2,220);ctx.font='500 22px Inter, sans-serif';ctx.fillText('HARI 1',W/2,262);}
+    ctx.globalAlpha=1;if(!REDUCED)requestAnimationFrame(f);}
+  f(performance.now());
+}
+function boot(){hero();phone();}
+boot();if(window.d3&&window.topojson){fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/land-50m.json').then(r=>r.json()).then(w=>{LAND=topojson.feature(w,w.objects.land);}).catch(()=>{});}
+})();
+</script>
+</body>
+</html>
